@@ -10,7 +10,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **João Victor Lindberg Gomes de Moraes** -**Time de desenvolvedores**
 - **Joaquim Paulo Vieira de Melo**         -**Time de desenvolvedores**
 - **José Miguel Correia Dias**             -**Time de desenvolvedores**
-- José Rodrigo de Santana Lima**           -**Time de desenvolvedores**
+- **José Rodrigo de Santana Lima**         -**Time de desenvolvedores**
 - **Marco Antônio Bittencourt Costa**      -**Product owner e Scrumm Master**
 
 ---
