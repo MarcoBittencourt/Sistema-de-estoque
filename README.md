@@ -14,14 +14,6 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **Marco Antônio Bittencourt Costa**      -**Product owner e Scrumm Master**
 
 ---
-# trello
-
-<img width="1641" height="766" alt="image" src="https://github.com/user-attachments/assets/487cd072-d3fa-446b-9265-74e0732c3d98" />
-
-
-**link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
-
----
 
 # Funcionalidades Principais
 
@@ -29,6 +21,15 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **Movimentação de estoque:** controle as **entradas e saídas** de produtos, com histórico detalhado.  
 - **Relatórios:** gere relatórios de estoque atual, movimentações e produtos com baixo nível de quantidade.  
 - **Controle de usuários:** autenticação e níveis de acesso para administradores e operadores.  
+
+---
+
+# trello
+
+<img width="1641" height="766" alt="image" src="https://github.com/user-attachments/assets/487cd072-d3fa-446b-9265-74e0732c3d98" />
+
+
+**link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
 
 ---
 
@@ -44,6 +45,10 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **Linguagem:** Python + django 
 - **Banco de Dados:** json 
 - **Bibliotecas:** os, json e datetime
+
+---
+
+# Estrutura de dados
 
 ---
 
