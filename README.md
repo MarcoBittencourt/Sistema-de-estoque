@@ -5,7 +5,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-## Autores
+# Autores
 
 - **João Victor Lindberg Gomes de Moraes** -**Time de desenvolvedores**
 - **Joaquim Paulo Vieira de Melo**         -**Time de desenvolvedores**
@@ -14,14 +14,14 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **Marco Antônio Bittencourt Costa**      -**Product owner e Scrumm Master**
 
 ---
-## trello
+# trello
 
 ![alt text](image.png)
 - **link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
 
 ---
 
-## Funcionalidades Principais
+# Funcionalidades Principais
 
 - **Cadastro de produtos:** registre novos itens com informações como nome, código, quantidade, categoria e fornecedor.  
 - **Movimentação de estoque:** controle as **entradas e saídas** de produtos, com histórico detalhado.  
@@ -30,7 +30,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-## Tecnologias Utilizadas
+# Tecnologias Utilizadas
 
 - **Linguagem:** Python + django 
 - **Banco de Dados:** json 
@@ -38,9 +38,9 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-## **Requisitos**
+# **Requisitos**
 
-# Funcionalidades Principais
+## Funcionalidades Principais
 
 · CRUD de itens (criar / ler / atualizar / excluir - preferencialmente soft delete).
 
@@ -66,7 +66,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 ·         Importação/Exportação (CSV/Excel), backups e versionamento dos dados.
 ·         Painel/Dashboard com KPIs e ações rápidas.
 
- #  Requisitos Não Funcionais
+ ##  Requisitos Não Funcionais
 
 ·         Persistência durável: banco relacional (Postgres, MySQL) ou NoSQL quando apropriado.
 ·         Autenticação segura e autorização baseada em papéis (RBAC).
