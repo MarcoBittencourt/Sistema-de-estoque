@@ -32,9 +32,10 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-# Estrutura de Dados
+# Diagrama de Classes
 
-<img width="857" height="269" alt="image" src="https://github.com/user-attachments/assets/30a39cda-a93c-4c5f-98b7-03acda595cca" />
+<img width="861" height="334" alt="Diagram_classes drawio" src="https://github.com/user-attachments/assets/1b91657f-13da-4d09-aab1-f001b8ee26e3" />
+
 
 ---
 
