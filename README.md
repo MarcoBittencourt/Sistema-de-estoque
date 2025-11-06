@@ -40,7 +40,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ## **Requisitos**
 
-## Funcionalidades Principais
+# Funcionalidades Principais
 
 · CRUD de itens (criar / ler / atualizar / excluir - preferencialmente soft delete).
 
@@ -66,7 +66,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 ·         Importação/Exportação (CSV/Excel), backups e versionamento dos dados.
 ·         Painel/Dashboard com KPIs e ações rápidas.
 
- ##  Requisitos Não Funcionais
+ #  Requisitos Não Funcionais
 
 ·         Persistência durável: banco relacional (Postgres, MySQL) ou NoSQL quando apropriado.
 ·         Autenticação segura e autorização baseada em papéis (RBAC).
