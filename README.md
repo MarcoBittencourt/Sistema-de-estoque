@@ -1,4 +1,4 @@
-# Sistema de Estoque
+# **Sistema de Estoque**
 
 Um sistema desenvolvido em **Python** para o controle e gerenciamento de produtos em um **galpão de armazenamento**.  
 O projeto visa otimizar o registro de itens, acompanhar movimentações de entrada e saída, gerar relatórios e manter o controle de usuários de forma simples e eficiente.
@@ -50,6 +50,45 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # Estrutura de dados
 
+
+**arquivo raiz**: JSON object / dict
+
+**chave (nome do item)**: string (uso atual: o código usa o próprio nome como chave key = nome — atenção a nomes duplicados/maiúsculas).
+
+**quantidade**:
+
+**tipo**: inteiro (int)
+
+**restrição**: quantidade >= 0
+
+**comportamento no código**:
+
+adicionar_item soma à quantidade existente (se item existe).
+
+remover_item subtrai; se chega a 0, o item é deletado do dicionário.
+
+**validade**:
+
+**tipo**: string com formato "dd/mm/YYYY" ou null
+
+None/null indica sem validade (não perecível / indefinido)
+
+**observado pelo código**:
+
+tradutor_str_pra_data aceita entrada dd/mm/YYYY ou dd/mm/YY, retorna date.
+
+_format_validade padroniza para dd/mm/YYYY ao salvar.
+
+_is_vencido compara com date.today().
+
+**Invariantes importantes**:
+
+Se validade for null, _is_vencido trata como não vencido.
+
+Sempre que quantidade == 0 o item é removido do JSON.
+
+O código assume que quantidade existe e é inteiro ao gerar relatório; corrupção de arquivo pode causar exceções.
+
 ---
 
 # **Requisitos**
@@ -99,4 +138,3 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 
 **Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
-
