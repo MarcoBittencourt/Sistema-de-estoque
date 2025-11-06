@@ -14,6 +14,12 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 - **Marco Antônio Bittencourt Costa**      -**Product owner e Scrumm Master**
 
 ---
+## trello
+
+![alt text](image.png)
+- **link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
+
+---
 
 ## Funcionalidades Principais
 
@@ -32,7 +38,51 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-## Partes do trabalho
+## **Requisitos**
 
-- **Trello:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
-- **Requisitos:** https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?usp=sharing
+## Funcionalidades Principais
+
+· CRUD de itens (criar / ler / atualizar / excluir - preferencialmente soft delete).
+
+· Categorias (hierarquia).
+
+· Localizações físicas (depósito, loja, prateleira) e gerenciamento de estoques por local.
+
+·         Controle de quantidade e unidade de medida (inteiros/decimais, conversão de unidade de medida mínima).
+
+·         Lote e validade (suporte FIFO, bloqueio automático de vencidos).
+
+·         Histórico de movimentação (entradas, saídas, transferências, ajustes) com registro de lote e validade.
+
+·         Anexos e documentos (nota fiscal, matrícula, NF) com metadados e link/arquivo.
+
+·         Avaliação de valor (contabilização, data da avaliação) e histórico de avaliações.
+
+·         Relatórios (snapshot por data, total por categoria, itens abaixo do estoque mínimo, auditoria).
+
+·         Permissões/usuários: read / write / admin e papéis customizáveis.
+·         Auditoria detalhada (quem, quando, o quê e motivo).
+
+·         Importação/Exportação (CSV/Excel), backups e versionamento dos dados.
+·         Painel/Dashboard com KPIs e ações rápidas.
+
+ ##  Requisitos Não Funcionais
+
+·         Persistência durável: banco relacional (Postgres, MySQL) ou NoSQL quando apropriado.
+·         Autenticação segura e autorização baseada em papéis (RBAC).
+
+·         Escalabilidade horizontal e vertical para suportar desde 1 até dezenas de milhares de itens e usuários.
+
+·         Segurança: TLS/HTTPS, criptografia em repouso para documentos sensíveis, proteção contra injections e XSS.
+
+·         Internacionalização: formatos de data, moeda e multilíngue quando necessário.
+
+·         Logs, monitoramento e estratégia de backups com testes periódicos de restore.
+
+·         SLAs e requisitos de performance mínimos (ex.: listagens paginadas < 1s para 1000 itens).
+
+ ·    Privacidade: políticas de retenção, acesso e anonimização onde aplicável.
+
+
+**Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
+
