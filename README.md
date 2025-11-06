@@ -32,8 +32,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
-## Links do trabalho
+## Partes do trabalho
 
 - **Trello:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
-- **Requisitos:**
-- **Modelo entidade relacionamento:**
+- **Requisitos:** https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?usp=sharing
