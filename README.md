@@ -32,6 +32,12 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
+# Estrutura de Dados
+
+<img width="857" height="269" alt="image" src="https://github.com/user-attachments/assets/30a39cda-a93c-4c5f-98b7-03acda595cca" />
+
+---
+
 # Tecnologias Utilizadas
 
 - **Linguagem:** Python + django 
