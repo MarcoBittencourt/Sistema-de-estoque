@@ -16,7 +16,8 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 ---
 # trello
 
-![alt text](image.png)
+![alt text](<img width="1296" height="749" alt="image" src="https://github.com/user-attachments/assets/f3b4cac7-7c33-48e8-8507-82c6891ffc4b" />
+)
 - **link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
 
 ---
