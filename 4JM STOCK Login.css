@@ -1,0 +1,125 @@
+.container {
+  max-width: 600px;
+      margin: 40px auto;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+}
+
+
+
+
+
+
+header {
+    margin-top: 5px;
+}
+
+h1 {
+    font-style: #ffffff;
+    font-size: 70px;
+}
+.h1-hover {
+transition: color 1.0s ease;
+    display: inline-block;
+      border-radius: 80px;
+  padding: 1px 5px;
+color: #ffffff;
+}
+.h1-hover:hover {
+    color: #ffffff;
+}
+
+.p-hover {
+transition: color 0.3s ease;
+  color: #fff;
+font-size: 20px; 
+}
+.p-hover:hover {
+    color: #ffffff;
+}
+
+.p2-hover {
+    transition: color 0.3s ease;
+    color: #fff;
+}
+.p2-hover:hover {
+    color: #ffffff;
+}
+Body { 
+margin: 1;
+  font-family: Arial, serif;
+    color: #fff;
+    text-align: center;
+  Background: linear-gradient(to right, #dbc375, #005bb6);
+font-family: 'Arial', sans-serif;
+}
+p {
+font-size: 20px;
+font-family: Arial, sans-serif;
+
+}
+.loginbtn {
+transition: color 1.0s ease;
+  display: inline-block;
+    padding: 20px 167px;
+        background:#020033;
+          color:#fff;
+        text-decoration:none;
+      border: none;
+    border-radius:60px;
+  cursor:pointer;
+font-size:20px;
+border: 2px solid #fff
+} 
+
+.loginbtn:hover {
+  background-color: #0091ff;
+  color: #000000
+}
+.loginbtn:active {
+transform: translateY(1px); 
+}
+
+.cadastrarbtn {
+transition: color 1.0s ease;
+  display: inline-block;
+    padding: 20px 135px;
+      background: #020033;
+          color:#fff;
+          text-decoration:none;
+        border: none;
+      border-radius:60px;
+   cursor:pointer;
+font-size:20px;
+border: 2px solid #fff
+} 
+.cadastrarbtn:hover {
+  background-color: #0091ff;
+  color: #000000;
+}
+.cadastrarbtn:active {
+transform: translateY(1px); 
+} 
+.copyright-hover {
+transition: 0.5s ease-in;    
+    display: inline-block;
+                cursor:pointer;
+                    color: #fff;
+        padding: 20px 25px; 
+    font-size: 15px;
+text-decoration: none;
+border: 2px solid #fff;
+border-radius: 60px;
+}
+
+.copyright-hover:hover {    
+                cursor:pointer;
+                    color: #fff;
+        padding: 20px 25px; 
+    font-size: 15px;
+text-decoration: none;
+border: 2px solid #fff;
+border-radius: 60px;
+}

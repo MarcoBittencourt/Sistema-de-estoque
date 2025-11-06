@@ -1,0 +1,121 @@
+h1 {
+font-size: 60px;
+        color: #fff;
+}
+.sairbtn-hover {
+transition: 0.5s ease;
+    display: inline-block;
+        color: #ffffff;
+            background: #020033;
+            cursor:pointer;
+            padding: 15px 20px; 
+            font-size: 20px;
+        text-decoration: none;
+    border-radius: 120px;
+border: 2px solid #ffffff;
+}
+.sairbtn-hover:hover {
+display: inline-block;
+        color: #000000;
+            background: #0091ff;
+                cursor:pointer;
+                padding: 15px 50px; 
+                font-size: 20px;
+        text-decoration: none;
+    border-radius: 120px;
+border: solid 2px #ffffff;
+}
+body {
+font-family: Arial, sans-serif;
+    margin: 1;
+        Color: #ffffff;
+        Padding: 10px 200px;
+    Background: linear-gradient(to right, #dbc375, #005bb6);
+text-align: left;
+}
+
+
+.copyright-hover {
+transition: 0.5s ease-in;    
+    display: inline-block;
+                cursor:pointer;
+                    color: #fff;
+        padding: 20px 85px; 
+    font-size: 15px;
+text-decoration: none;
+border: 2px solid #fff;
+border-radius: 60px;
+}
+
+.copyright-hover:hover {    
+                cursor:pointer;
+                    color: #fff;
+        padding: 20px 85px; 
+    font-size: 15px;
+text-decoration: none;
+border: 2px solid #fff;
+border-radius: 60px;
+}
+
+.emailbtn-hover {
+transition: 0.5s ease;    
+    display: inline-block;
+        color: #fff;
+            background: #020033;
+            cursor:pointer;
+            padding: 20px 70px; 
+            font-size: 20px;
+        text-decoration: none;
+    border-radius: 60px;
+border: 2px solid #fff;
+}
+.emailbtn-hover:hover {    
+    display: inline-block;
+        color: #000000;
+            background: #0091ff;
+            cursor:pointer;
+            padding: 20px 70px; 
+            font-size: 20px;
+        text-decoration: none;
+    border-radius: 60px;
+border: 2px solid #ffffff;
+}   
+.senhabtn-hover {
+transition: 0.3s ease;
+    display: inline-block;
+        color: #fff; 
+            background: #020033;
+                cursor:pointer;
+                    padding: 20px 70px; 
+                font-size: 20px;
+            text-decoration: none;
+        border-radius: 60px;
+border: 2px solid #fff;
+}
+.senhabtn-hover:hover {
+    background: #0091ff;
+    color: #000000;
+}  
+.acessarbtn-hover {
+transition: 0.3s ease;
+    display: inline-block;
+        color: #fff; 
+            background: #020033;
+                cursor:pointer;
+                    padding: 20px 50px; 
+                font-size: 20px;
+            text-decoration: none;
+        border-radius: 60px;
+border: 2px solid #fff;
+}
+.acessarbtn-hover:hover {
+    display: inline-block;
+        color: #000000; 
+            background: #0091ff;
+                cursor:pointer;
+                    padding: 20px 70px; 
+                font-size: 20px;
+            text-decoration: none;
+        border-radius: 60px;
+border: 2px solid #fff;
+}
