@@ -40,7 +40,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # Diagrama de casos de uso
 
-<img width="575" height="699" alt="Captura de tela 2025-11-10 085000" src="https://github.com/user-attachments/assets/357aa899-8a0c-46bc-8991-857316944bbb" />
+<img width="570" height="692" alt="Captura de tela 2025-11-10 091625" src="https://github.com/user-attachments/assets/6b06960c-c8bb-4434-8c6c-9eafc5b66910" />
 
 
 ---
