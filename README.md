@@ -35,7 +35,12 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # Diagrama de Classes
 
-<img width="861" height="334" alt="Diagram_classes drawio" src="https://github.com/user-attachments/assets/1b91657f-13da-4d09-aab1-f001b8ee26e3" />
+<img width="861" height="272" alt="MER drawio" src="https://github.com/user-attachments/assets/12f34169-7291-4cba-9b2b-32b954255a7a" />
+
+
+# Diagrama de casos de uso
+
+<img width="447" height="541" alt="Diagrama_casosDeUso drawio" src="https://github.com/user-attachments/assets/105e3cc4-6b7c-4947-98d4-694f760804c0" />
 
 
 ---
