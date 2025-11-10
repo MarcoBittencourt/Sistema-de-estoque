@@ -1,0 +1,212 @@
+# Sistema de estoque com nova organização de dados e registro de movimentos
+# me notifique em caso de algum erro de logica(ainda estou a ver a logica do tipo_unidade)
+import os
+import json
+from datetime import datetime, date
+import random
+class Estoque:
+    def __init__(self, arquivo_estoque='estoque.json'):
+        self.arquivo_estoque = arquivo_estoque
+        self.estoque = self.carregar_estoque()
+
+    def carregar_estoque(self):
+        if os.path.exists(self.arquivo_estoque):
+            with open(self.arquivo_estoque, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return {"items": {}, "movimentações": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
+
+    def limpar(self):
+        
+        self.registro_mvt("inventario", "limpar")
+        self.estoque["items"] = {}
+        self.salvar_estoque()
+
+    def gerar_sku(self,nome):
+        base = nome.lower().replace(" ","-")
+        numeros = [int(sku.split("-")[-1]) for sku in self.estoque["items"].keys() if sku.startswith(f"{base}-")]
+        proximo_num = max(numeros + [0]) +1
+        return f"{base}-{proximo_num:03d}"
+
+    def registro_mvt(self, sku, tipo, quantidade, lote_id):
+        if "movimentações" not in self.estoque:
+            self.estoque["movimentações"] = []
+
+        proximo = len(self.estoque["movimentações"]) +1
+        id_mvt = f"MVT-{proximo:04d}"
+
+        if tipo == "limpar":
+            mvt= {
+                "id": id_mvt,
+                "sku": str(sku),
+                "tipo": tipo,
+                "data": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+            }
+
+            mvt= {
+                "id": id_mvt,
+                "sku": str(sku),
+                "tipo": tipo,
+                "quantidade": quantidade,
+                "lote": lote_id,
+                "data": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+            }
+        self.estoque["movimentações"].append(mvt)
+
+    def salvar_estoque(self):
+        self.estoque["metadados"]["ultima_atualização"] = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+        with open(self.arquivo_estoque, 'w', encoding='utf-8') as f:
+            json.dump(self.estoque, f, indent=4, ensure_ascii=False)
+
+    def str_pra_date(self, validade_str):
+        if validade_str is None:
+            return None
+        for fmt in ("%d/%m/%Y", "%d/%m/%y"):
+            try:
+                return datetime.strptime(validade_str, fmt).date()
+            except ValueError:
+                pass
+        raise ValueError(f"Formato de validade inválido: {validade_str}. Use dd/mm/aaaa")
+
+    def date_pra_str(self, validade_date):
+        if validade_date is None:
+            return None
+        return validade_date.strftime("%d/%m/%Y")
+
+    def is_vencido(self, validade_date):
+        if validade_date is None:
+            return False
+        return validade_date < date.today()
+
+
+    def adicionar_item(self, nome, lote, quantidade, tipo_unit=None , validade=None):
+        data_atual = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+        nome = nome.capitalize()
+        sku = None
+
+        for item_sku, item in self.estoque["items"].items():
+            if item["nome"] == nome:
+                sku = item_sku
+                break
+        if validade is not None:
+            validade_date = self.str_pra_date(validade)
+            validade_str = self.date_pra_str(validade_date)
+        else:
+            validade_str = None
+
+        if tipo_unit is None:
+            tipo_unit = "(?)"
+
+        if sku is None:
+            sku = self.gerar_sku(nome)
+            self.estoque["items"][sku] = {
+                "sku": sku,
+                "nome": nome,
+                "tipo_unidade": tipo_unit,
+                "estoque_total": 0,
+                "lotes": {}
+            }
+        
+        lote_id = f"lote-{str(lote)}"
+        self.estoque["items"][sku]["lotes"][lote_id] = {
+            "quantidade": quantidade,
+            "validade": validade_str,
+            "data_entrada": data_atual
+        }
+        self.registro_mvt(sku,"entrada", quantidade, lote_id)
+        self.estoque["items"][sku]["estoque_total"] += quantidade
+        self.salvar_estoque()
+
+    def remover_item(self, nome, quantidade):
+
+        for sku, item in self.estoque["items"].items():
+            if item["nome"] == nome:
+                if item["estoque_total"] >= quantidade:
+                    qtd_restante = quantidade
+                    lotes = sorted(item["lotes"].items(), key=lambda x: x[1]["data_entrada"])
+                    for lote_id, lote in lotes:
+                        if lote["quantidade"] <= qtd_restante:
+                            qtd_restante -= lote["quantidade"]
+                            del item["lotes"][lote_id]
+                            self.registro_mvt(item, "saida-lote", quantidade, lote_id)
+                        else:
+                            lote["quantidade"] -= qtd_restante
+                            qtd_restante = 0
+                            self.registro_mvt(item, "saida", quantidade, lote_id)
+                        if qtd_restante == 0:
+                            break
+
+                    item["estoque_total"] -= quantidade
+                    if item["estoque_total"] == 0:
+                        del self.estoque["items"][sku]
+                    self.salvar_estoque()
+                    return
+        print("Item não encontrado ou quantidade insuficiente.")
+
+
+    def remover_itens_vencidos(self):
+        removidos = []
+        itens_pra_remover = []
+
+        for sku, item in self.estoque["items"].items():
+            lotes_pra_remover = []
+            for lote_id, lote in item["lotes"].items():
+                if lote.get("validade"):
+                    try:
+                        val_date = self.str_pra_date(lote["validade"])
+                        if self.is_vencido(val_date):
+                            removidos.append({
+                                "sku": sku,
+                                "nome": item["nome"],
+                                "lote": lote_id,
+                                "quantidade": lote["quantidade"],
+                                "validade": lote["validade"]
+                            })
+                            item["estoque_total"] -= lote["quantidade"]
+                            lotes_pra_remover.append(lote_id)
+                            self.registro_mvt(sku, "vencimento-val", lote["quantidade"], lote_id)
+                    except ValueError:
+                        continue
+
+            for lote_id in lotes_pra_remover:
+                del item["lotes"][lote_id]
+            if not item["lotes"]:
+                itens_pra_remover.append(sku)
+
+        for sku in itens_pra_remover:
+            del self.estoque["items"][sku]
+        if removidos:
+            self.salvar_estoque()
+            print("\nitens vencidos removidos:")
+            for item in removidos:
+                print(f"- {item['nome']} (SKU: {item['sku']}):")
+                print(f"  Lote: {item['lote']}")
+                print(f"  Quantidade: {item['quantidade']}")
+                print(f"  Validade: {item['validade']}")
+        return removidos
+
+    def gerar_relatorio(self):
+        print("Relatório de Estoque:")
+        for sku, item in self.estoque["items"].items():
+            print(f"\nItem: {item['nome']} (SKU: {sku})")
+            print(f"Estoque total: {item['estoque_total']} {item['tipo_unidade']}")
+            print("Lotes:")
+            for lote_id, lote in item["lotes"].items():
+                validade = lote["validade"] if lote["validade"] else "indefinido/não perecível"
+                print(f"  {lote_id}: {lote['quantidade']} {item['tipo_unidade']}. (Validade: {validade})")
+
+if __name__ == "__main__":
+    from time import sleep
+    #NOTA: o padrao das validades deve ser nos formatos 'dd/mm/aaaa' ou 'dd/mm/aa'
+    estoque = Estoque()
+    estoque.adicionar_item("caneta", "0001" , 100)
+    estoque.adicionar_item("caderno","0002", 50)
+    estoque.adicionar_item("Tinta b/ água","0004", 20,"L", "14/09/26")
+
+    estoque.adicionar_item("Tinta b/ água","0005", 60,"L", "14/09/24")
+    estoque.gerar_relatorio()
+
+    estoque.remover_itens_vencidos()
+    print("--- Relatório ---")
+    estoque.gerar_relatorio()
+
+
