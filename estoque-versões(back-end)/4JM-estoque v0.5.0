@@ -223,7 +223,6 @@ class Estoque:
                 local = lote.get("localizacao", "—")
                 print(f"  {lote_id}: {lote['quantidade']} {item.get('tipo_unidade','')}. (Validade: {validade}) Local: {local}")
 if __name__ == "__main__":
-    from time import sleep
     #NOTA: o padrao das validades deve ser nos formatos 'dd/mm/aaaa' ou 'dd/mm/aa'
     estoque = Estoque()
     estoque.adicionar_item("caneta", "0001" , 100)
