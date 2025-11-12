@@ -13,7 +13,7 @@ class Estoque:
         if os.path.exists(self.arquivo_estoque):
             with open(self.arquivo_estoque, 'r', encoding='utf-8') as f:
                 return json.load(f)
-        return {"items": {},"localizaçoes": {}, "movimentaçoes": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
+        return {"items": {}, "movimentaçoes": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
 
 
     def limpar(self):
@@ -81,27 +81,8 @@ class Estoque:
             return False
         return validade_date < date.today()
 
-    def adicionar_local(self, nome: str, tamanho: int, rua: str, bairro: str, cep: str, cidade:str):
-
-        proximo = len(self.estoque["localizaçoes"]) +1
-        id_galpao = f"{nome}-{proximo:04d}"
-
-        self.estoque["localizaçoes"][id_galpao] = {
-            "nome": nome,
-            "estoque_total": int(tamanho),
-            "estoque_livre": int(tamanho),
-            "endereco": {
-                "rua": rua,
-                "bairro": bairro,
-                "cep": cep,
-                "cidade": cidade
-            }
-        }
-        self.salvar_estoque
-        return id_galpao
-
     
-    def adicionar_item(self, nome: str, lote:str, quantidade: int, tipo_unit:str=None , validade=None, local:str=None):
+    def adicionar_item(self, nome: str, lote:str, quantidade: int, tipo_unit:str=None , validade=None):
         data_atual = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
         nome = nome.strip().capitalize()
         sku = None
@@ -133,7 +114,6 @@ class Estoque:
             "quantidade": quantidade,
             "validade": validade_str,
             "data_entrada": data_atual,
-            "localização": local if local in self.estoque.get("localizaçoes", {}) else (local or None)
         }
 
         self.registro_mvt(sku,"entrada", quantidade, lote_id)
