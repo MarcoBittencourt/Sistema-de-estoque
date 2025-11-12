@@ -8,55 +8,58 @@ class Estoque:
     def __init__(self, arquivo_estoque='estoque.json'):
         self.arquivo_estoque = arquivo_estoque
         self.estoque = self.carregar_estoque()
-
+    #Vai verificar se o arquivo do estoque existe e em seguida cria os itens principais e coloca a data de criação no metadados
     def carregar_estoque(self):
         if os.path.exists(self.arquivo_estoque):
             with open(self.arquivo_estoque, 'r', encoding='utf-8') as f:
                 return json.load(f)
-        return {"items": {}, "movimentações": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
+        return {"items": {}, "movimentaçoes": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
+
 
     def limpar(self):
-        
         self.registro_mvt("inventario", "limpar")
         self.estoque["items"] = {}
         self.salvar_estoque()
 
+    # Aplica a numeração sku do, na qual sera mais usado quando for aplicado a variação de produto(cor, etc...) no codigo
     def gerar_sku(self,nome):
         base = nome.lower().replace(" ","-")
         numeros = [int(sku.split("-")[-1]) for sku in self.estoque["items"].keys() if sku.startswith(f"{base}-")]
         proximo_num = max(numeros + [0]) +1
         return f"{base}-{proximo_num:03d}"
 
-    def registro_mvt(self, sku, tipo, quantidade, lote_id):
-        if "movimentações" not in self.estoque:
-            self.estoque["movimentações"] = []
+    
+    def registro_mvt(self, sku, tipo, quantidade=None, lote_id=None):
+        if "movimentaçoes" not in self.estoque:
+            self.estoque["movimentaçoes"] = []
 
-        proximo = len(self.estoque["movimentações"]) +1
+        proximo = len(self.estoque["movimentaçoes"]) +1
         id_mvt = f"MVT-{proximo:04d}"
 
-        if tipo == "limpar":
-            mvt= {
-                "id": id_mvt,
-                "sku": str(sku),
-                "tipo": tipo,
-                "data": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-            }
+        mvt = {
+            "id": id_mvt,
+            "sku": str(sku),
+            "tipo": tipo,
+            "data": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+        }
+        # essa parte serve para casos como o limpar() que n especifica quantidade ou lote
+        if quantidade is not None:
+            mvt["quantidade"] = int(quantidade)
+        if lote_id is not None:
+            mvt["lote"] = str(lote_id)
 
-            mvt= {
-                "id": id_mvt,
-                "sku": str(sku),
-                "tipo": tipo,
-                "quantidade": quantidade,
-                "lote": lote_id,
-                "data": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-            }
-        self.estoque["movimentações"].append(mvt)
+        self.estoque["movimentaçoes"].append(mvt)
 
     def salvar_estoque(self):
-        self.estoque["metadados"]["ultima_atualização"] = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
+        self.estoque["metadados"]["ultima_atualização"] = datetime.now().strftime("%Y/%m/%d-%H:%M:%S") 
         with open(self.arquivo_estoque, 'w', encoding='utf-8') as f:
             json.dump(self.estoque, f, indent=4, ensure_ascii=False)
 
+    """""""""""
+    str_pra_date e date_pra_str, servem pra quando for adicionar o item, o sistema pega a data
+    e transformamos em Date e em seguida de volta pra Str, assim garantimos que a data 
+    esta correta e deixa todas as validades registradas no mesmo formato.
+    """""""""""
     def str_pra_date(self, validade_str):
         if validade_str is None:
             return None
@@ -72,19 +75,20 @@ class Estoque:
             return None
         return validade_date.strftime("%d/%m/%Y")
 
+
     def is_vencido(self, validade_date):
         if validade_date is None:
             return False
         return validade_date < date.today()
 
-
-    def adicionar_item(self, nome, lote, quantidade, tipo_unit=None , validade=None):
+    
+    def adicionar_item(self, nome: str, lote:str, quantidade: int, tipo_unit:str=None , validade=None):
         data_atual = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-        nome = nome.capitalize()
+        nome = nome.strip().capitalize()
         sku = None
 
         for item_sku, item in self.estoque["items"].items():
-            if item["nome"] == nome:
+            if item["nome"] == nome.lower():
                 sku = item_sku
                 break
         if validade is not None:
@@ -105,50 +109,53 @@ class Estoque:
                 "estoque_total": 0,
                 "lotes": {}
             }
-        
         lote_id = f"lote-{str(lote)}"
         self.estoque["items"][sku]["lotes"][lote_id] = {
             "quantidade": quantidade,
             "validade": validade_str,
-            "data_entrada": data_atual
+            "data_entrada": data_atual,
         }
+
         self.registro_mvt(sku,"entrada", quantidade, lote_id)
         self.estoque["items"][sku]["estoque_total"] += quantidade
         self.salvar_estoque()
 
-    def remover_item(self, nome, quantidade):
-
+    def remr_item(self, nome:str, quantidade:int):
+        nome_limpo = nome.strip().lower
         for sku, item in self.estoque["items"].items():
-            if item["nome"] == nome:
+            if item["nome"] == nome_limpo:
                 if item["estoque_total"] >= quantidade:
                     qtd_restante = quantidade
+                    # ordena lotes por data_entrada (FIFO)
                     lotes = sorted(item["lotes"].items(), key=lambda x: x[1]["data_entrada"])
                     for lote_id, lote in lotes:
                         if lote["quantidade"] <= qtd_restante:
-                            qtd_restante -= lote["quantidade"]
-                            del item["lotes"][lote_id]
                             self.registro_mvt(item, "saida-lote", quantidade, lote_id)
+                            qtd_restante -= lote["quantidade"]                            
+                            del item["lotes"][lote_id]
                         else:
+                            self.registro_mvt(item, "saida", quantidade, lote_id)                            
                             lote["quantidade"] -= qtd_restante
                             qtd_restante = 0
-                            self.registro_mvt(item, "saida", quantidade, lote_id)
                         if qtd_restante == 0:
                             break
 
                     item["estoque_total"] -= quantidade
-                    if item["estoque_total"] == 0:
+                    if item["estoque_total"] <= 0:
                         del self.estoque["items"][sku]
                     self.salvar_estoque()
                     return
+                else:
+                    break
         print("Item não encontrado ou quantidade insuficiente.")
 
 
-    def remover_itens_vencidos(self):
+    def remr_itens_vencidos(self):
         removidos = []
-        itens_pra_remover = []
+        itens_pra_remr = []
 
         for sku, item in self.estoque["items"].items():
-            lotes_pra_remover = []
+            lotes_pra_remr = []
             for lote_id, lote in item["lotes"].items():
                 if lote.get("validade"):
                     try:
@@ -162,18 +169,20 @@ class Estoque:
                                 "validade": lote["validade"]
                             })
                             item["estoque_total"] -= lote["quantidade"]
-                            lotes_pra_remover.append(lote_id)
+                            lotes_pra_remr.append(lote_id)
                             self.registro_mvt(sku, "vencimento-val", lote["quantidade"], lote_id)
                     except ValueError:
                         continue
 
-            for lote_id in lotes_pra_remover:
-                del item["lotes"][lote_id]
+            for lote_id in lotes_pra_remr:
+                if lote_id in item["lotes"]:
+                    del item["lotes"][lote_id]
             if not item["lotes"]:
-                itens_pra_remover.append(sku)
+                itens_pra_remr.append(sku)
 
-        for sku in itens_pra_remover:
-            del self.estoque["items"][sku]
+        for sku in itens_pra_remr:
+            if sku in self.estoque["items"]:
+                del self.estoque["items"][sku]
         if removidos:
             self.salvar_estoque()
             print("\nitens vencidos removidos:")
@@ -183,6 +192,25 @@ class Estoque:
                 print(f"  Quantidade: {item['quantidade']}")
                 print(f"  Validade: {item['validade']}")
         return removidos
+    
+    def listar_movimentos(self):
+        movimentos = self.estoque.get("movimentaçoes", [])
+
+        if not movimentos:
+            print("Nenhum movimento registrado.")
+            return
+
+        print(f"\nRelatório de Movimentações ({len(movimentos)})")
+        for move in movimentos:
+            if move.get('quantidade') is not None:
+                quantidade= (f"|Quantidade: {move.get('quantidade')}")
+            else:
+                quantidade=""
+            if move.get('lote') is not None:
+                lote= (f"|Lote: {move.get('lote')}")
+            else:
+                lote=""
+            print(f"ID: {move.get('id','-')}|SKU: {move.get('sku','-')}|Tipo: {move.get('tipo','-')}|Data: {move.get('data','-')}{str(quantidade)}{str(lote)}")
 
     def gerar_relatorio(self):
         print("Relatório de Estoque:")
@@ -191,9 +219,9 @@ class Estoque:
             print(f"Estoque total: {item['estoque_total']} {item['tipo_unidade']}")
             print("Lotes:")
             for lote_id, lote in item["lotes"].items():
-                validade = lote["validade"] if lote["validade"] else "indefinido/não perecível"
-                print(f"  {lote_id}: {lote['quantidade']} {item['tipo_unidade']}. (Validade: {validade})")
-
+                validade = lote["validade"] if lote.get("validade") else "indefinido/não perecível"
+                local = lote.get("localizacao", "—")
+                print(f"  {lote_id}: {lote['quantidade']} {item.get('tipo_unidade','')}. (Validade: {validade}) Local: {local}")
 if __name__ == "__main__":
     from time import sleep
     #NOTA: o padrao das validades deve ser nos formatos 'dd/mm/aaaa' ou 'dd/mm/aa'
@@ -203,10 +231,12 @@ if __name__ == "__main__":
     estoque.adicionar_item("Tinta b/ água","0004", 20,"L", "14/09/26")
 
     estoque.adicionar_item("Tinta b/ água","0005", 60,"L", "14/09/24")
+    estoque.limpar()
     estoque.gerar_relatorio()
 
-    estoque.remover_itens_vencidos()
+    estoque.remr_itens_vencidos()
     print("--- Relatório ---")
     estoque.gerar_relatorio()
+    estoque.listar_movimentos()
 
 
