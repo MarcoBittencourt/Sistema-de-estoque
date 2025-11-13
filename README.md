@@ -35,12 +35,23 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # Diagrama de Classes
 
-<img width="1842" height="585" alt="Captura de tela 2025-11-10 085122" src="https://github.com/user-attachments/assets/f6395f12-5fd5-48b1-8997-7b3a3e72ad4d" />
+<img width="1345" height="403" alt="Captura de tela 2025-11-13 081911" src="https://github.com/user-attachments/assets/36ee9f32-6cff-439b-8f4f-ff7df3655a61" />
+
 
 
 # Diagrama de casos de uso
 
 <img width="570" height="692" alt="Captura de tela 2025-11-10 091625" src="https://github.com/user-attachments/assets/6b06960c-c8bb-4434-8c6c-9eafc5b66910" />
+
+
+# Diagrama desequência
+
+<img width="880" height="572" alt="Captura de tela 2025-11-13 081711" src="https://github.com/user-attachments/assets/cc46c113-b169-41f3-a4da-c62da2c43ac6" />
+
+
+# Modelo entidade relacionamento
+
+<img width="1842" height="585" alt="Captura de tela 2025-11-10 085122" src="https://github.com/user-attachments/assets/3d835521-1044-4b63-94a6-efd16c12014f" />
 
 
 ---
