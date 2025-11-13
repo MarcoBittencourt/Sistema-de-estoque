@@ -8,6 +8,7 @@ class Estoque:
     def __init__(self, arquivo_estoque='estoque.json'):
         self.arquivo_estoque = arquivo_estoque
         self.estoque = self.carregar_estoque()
+
     #Vai verificar se o arquivo do estoque existe e em seguida cria os itens principais e coloca a data de criação no metadados
     def carregar_estoque(self):
         if os.path.exists(self.arquivo_estoque):
@@ -21,7 +22,7 @@ class Estoque:
         self.estoque["items"] = {}
         self.salvar_estoque()
 
-    # Aplica a numeração sku do, na qual sera mais usado quando for aplicado a variação de produto(cor, etc...) no codigo
+    # Aplica a numeração sku do produto, na qual sera mais usado quando for aplicado a variação de produto(cor, etc...) no codigo
     def gerar_sku(self,nome):
         base = nome.lower().replace(" ","-")
         numeros = [int(sku.split("-")[-1]) for sku in self.estoque["items"].keys() if sku.startswith(f"{base}-")]
@@ -120,7 +121,7 @@ class Estoque:
         self.estoque["items"][sku]["estoque_total"] += quantidade
         self.salvar_estoque()
 
-    def remr_item(self, nome:str, quantidade:int):
+    def remover_item(self, nome:str, quantidade:int):
         nome_limpo = nome.strip().lower
         for sku, item in self.estoque["items"].items():
             if item["nome"] == nome_limpo:
@@ -150,12 +151,12 @@ class Estoque:
         print("Item não encontrado ou quantidade insuficiente.")
 
 
-    def remr_itens_vencidos(self):
+    def remover_itens_vencidos(self):
         removidos = []
-        itens_pra_remr = []
+        itens_pra_remover = []
 
         for sku, item in self.estoque["items"].items():
-            lotes_pra_remr = []
+            lotes_pra_remover = []
             for lote_id, lote in item["lotes"].items():
                 if lote.get("validade"):
                     try:
@@ -169,18 +170,18 @@ class Estoque:
                                 "validade": lote["validade"]
                             })
                             item["estoque_total"] -= lote["quantidade"]
-                            lotes_pra_remr.append(lote_id)
+                            lotes_pra_remover.append(lote_id)
                             self.registro_mvt(sku, "vencimento-val", lote["quantidade"], lote_id)
                     except ValueError:
                         continue
 
-            for lote_id in lotes_pra_remr:
+            for lote_id in lotes_pra_remover:
                 if lote_id in item["lotes"]:
                     del item["lotes"][lote_id]
             if not item["lotes"]:
-                itens_pra_remr.append(sku)
+                itens_pra_remover.append(sku)
 
-        for sku in itens_pra_remr:
+        for sku in itens_pra_remover:
             if sku in self.estoque["items"]:
                 del self.estoque["items"][sku]
         if removidos:
@@ -233,9 +234,7 @@ if __name__ == "__main__":
     estoque.limpar()
     estoque.gerar_relatorio()
 
-    estoque.remr_itens_vencidos()
+    estoque.remover_itens_vencidos()
     print("--- Relatório ---")
     estoque.gerar_relatorio()
     estoque.listar_movimentos()
-
-
