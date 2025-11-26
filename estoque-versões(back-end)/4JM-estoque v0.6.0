@@ -173,7 +173,7 @@ class Estoque:
         self.salvar_estoque()
 
     def remover_item(self, nome:str, quantidade:int):
-        nome_limpo = nome.strip().lower
+        nome_limpo = nome.strip().lower()
         for sku, item in self.estoque["items"].items():
             if item["nome"] == nome_limpo:
                 if item["estoque_total"] >= quantidade:
