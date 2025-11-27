@@ -156,3 +156,18 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 
 
 **Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
+
+# **Testes**
+
+# Testes unitários realizados:
+·    Função adicionar item
+·    Função  remover item
+·    Função limpar estoque
+
+# Teste de integração:
+·   Classe estoque
+
+# Link: https://docs.google.com/document/d/1zFkvGLDfj65pnoVK0iUFj36kBWI0w3nAYn71Fvb2yfg/edit?usp=sharing
+
+
+
