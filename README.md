@@ -26,7 +26,8 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # trello
 
-<img width="1279" height="828" alt="Captura de tela 2025-11-10 083601" src="https://github.com/user-attachments/assets/204f5c5a-d552-4887-b55f-e8e5142339ba" />
+<img width="1250" height="817" alt="image" src="https://github.com/user-attachments/assets/2a247a1b-1253-426b-8934-1853bf8d6a1a" />
+
 
 
 **link:** https://trello.com/invite/b/69035c1fe594dab62bf05b80/ATTI1fa56aab5c213bfe82ac4c4fae93108313BBA7AA/projeto-final-sandeison
@@ -161,7 +162,9 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 
 # Testes unitários realizados:
 ·    Função adicionar item
+
 ·    Função  remover item
+
 ·    Função limpar estoque
 
 # Teste de integração:
