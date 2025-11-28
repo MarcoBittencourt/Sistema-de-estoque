@@ -1,4 +1,4 @@
-# Sistema de estoque com nova organização de dados e registro de movimentos
+# adição de registro de localização(EM DESENVOLVIMENTO)
 # me notifique em caso de algum erro de logica(ainda estou a ver a logica do tipo_unidade)
 import os
 import json
@@ -8,13 +8,12 @@ class Estoque:
     def __init__(self, arquivo_estoque='estoque.json'):
         self.arquivo_estoque = arquivo_estoque
         self.estoque = self.carregar_estoque()
-
     #Vai verificar se o arquivo do estoque existe e em seguida cria os itens principais e coloca a data de criação no metadados
     def carregar_estoque(self):
         if os.path.exists(self.arquivo_estoque):
             with open(self.arquivo_estoque, 'r', encoding='utf-8') as f:
                 return json.load(f)
-        return {"items": {}, "movimentaçoes": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
+        return {"items": {},"localizaçoes": {}, "movimentaçoes": [], "metadados": {"gerado_em": datetime.now().strftime("%Y/%m/%d-%H:%M:%S")}}
 
 
     def limpar(self):
@@ -22,7 +21,7 @@ class Estoque:
         self.estoque["items"] = {}
         self.salvar_estoque()
 
-    # Aplica a numeração sku do produto, na qual sera mais usado quando for aplicado a variação de produto(cor, etc...) no codigo
+    # Aplica a numeração sku do, na qual sera mais usado quando for aplicado a variação de produto(cor, etc...) no codigo
     def gerar_sku(self,nome):
         base = nome.lower().replace(" ","-")
         numeros = [int(sku.split("-")[-1]) for sku in self.estoque["items"].keys() if sku.startswith(f"{base}-")]
@@ -82,16 +81,59 @@ class Estoque:
             return False
         return validade_date < date.today()
 
-    
-    def adicionar_item(self, nome: str, lote:str, quantidade: int, tipo_unit:str=None , validade=None):
+    def adicionar_local(self, nome: str, tamanho: int, rua: str, bairro: str, cep: int, cidade:str):
+        contador = 0
+        for local in self.estoque.get("localizaçoes", {}):
+            if local.startswith(nome):
+                contador += 1
+        if contador == 0:
+            id_galpao = nome
+        else:
+            id_galpao = f"{nome}({contador})"
+
+        self.estoque["localizaçoes"][id_galpao] = {
+            "nome": nome,
+            "estoque_total": int(tamanho),
+            "estoque_livre": int(tamanho),
+            "endereco": {
+                "rua": rua,
+                "bairro": bairro,
+                "cep": cep,
+                "cidade": cidade
+            },
+            "itens" : {}
+        }
+        self.registro_mvt(id_galpao, "entrada-local", tamanho)
+        self.salvar_estoque()
+        return id_galpao
+
+    def adicionar_item(self, nome: str, lote:str, quantidade: int, tipo_unit:str=None , validade=None, local:str=None):
         data_atual = datetime.now().strftime("%Y/%m/%d-%H:%M:%S")
-        nome = nome.strip().capitalize()
+        nome = (nome.strip().capitalize()).lower()
         sku = None
+
+        if local is not None:
+            if local not in self.estoque.get("localizaçoes", {}):
+                print(f"Erro: Localização '{local}' não existe.")
+                return
+            espaco_livre = self.estoque["localizaçoes"][local]["estoque_livre"]
+            if espaco_livre <= 0:
+                print(f"Erro: Localização '{local}' está cheia).")
+                return
+            if espaco_livre < quantidade:
+                print(f"Erro: Espaço insuficiente em '{local}'. Disponível: {espaco_livre}, Solicitado: {quantidade}")
+                return
 
         for item_sku, item in self.estoque["items"].items():
             if item["nome"] == nome.lower():
                 sku = item_sku
                 break
+            
+        lote_id = f"lote-{str(lote)}"
+        
+        if sku is not None and lote_id in self.estoque["items"][sku]["lotes"]:
+            print(f"Erro: Lote '{lote_id}' já existe para o item '{nome}'.")
+            return
         if validade is not None:
             validade_date = self.str_pra_date(validade)
             validade_str = self.date_pra_str(validade_date)
@@ -110,36 +152,61 @@ class Estoque:
                 "estoque_total": 0,
                 "lotes": {}
             }
-        lote_id = f"lote-{str(lote)}"
+        
+
+
         self.estoque["items"][sku]["lotes"][lote_id] = {
             "quantidade": quantidade,
             "validade": validade_str,
             "data_entrada": data_atual,
+            "localização": local
         }
+
+        if local is not None:
+            if sku not in self.estoque["localizaçoes"][local]["itens"]:
+                self.estoque["localizaçoes"][local]["itens"][sku] = 0
+            self.estoque["localizaçoes"][local]["itens"][sku] += quantidade
+            self.estoque["localizaçoes"][local]["estoque_livre"] -= quantidade
 
         self.registro_mvt(sku,"entrada", quantidade, lote_id)
         self.estoque["items"][sku]["estoque_total"] += quantidade
         self.salvar_estoque()
 
     def remover_item(self, nome:str, quantidade:int):
-        nome_limpo = nome.strip().lower
+        nome_limpo = nome.strip().lower()
         for sku, item in self.estoque["items"].items():
             if item["nome"] == nome_limpo:
                 if item["estoque_total"] >= quantidade:
                     qtd_restante = quantidade
                     # ordena lotes por data_entrada (FIFO)
                     lotes = sorted(item["lotes"].items(), key=lambda x: x[1]["data_entrada"])
+
                     for lote_id, lote in lotes:
-                        if lote["quantidade"] <= qtd_restante:
-                            self.registro_mvt(item, "saida-lote", quantidade, lote_id)
-                            qtd_restante -= lote["quantidade"]                            
-                            del item["lotes"][lote_id]
-                        else:
-                            self.registro_mvt(item, "saida", quantidade, lote_id)                            
-                            lote["quantidade"] -= qtd_restante
-                            qtd_restante = 0
                         if qtd_restante == 0:
                             break
+
+                        local = lote.get("localização")
+                        qtd_removida = min(lote["quantidade"], qtd_restante)
+
+                        if lote["quantidade"] <= qtd_restante:
+                            self.registro_mvt(sku, "saida-lote", lote["quantidade"], lote_id)
+                            qtd_restante -= lote["quantidade"]
+                            if local and local in self.estoque.get("localizaçoes", {}):
+                                self.estoque["localizaçoes"][local]["itens"][sku] -= lote["quantidade"]
+                                self.estoque["localizaçoes"][local]["estoque_livre"] += lote["quantidade"]
+                                
+                                del item["lotes"][lote_id]
+                            else:
+                                self.registro_mvt(sku, "saida", qtd_removida, lote_id)
+                                lote["quantidade"] -= qtd_removida
+                                qtd_restante = 0
+
+                                if local and local in self.estoque.get("localizaçoes", {}):
+                                    self.estoque["localizaçoes"][local]["itens"][sku] -= qtd_removida
+                                    self.estoque["localizaçoes"][local]["estoque_livre"] += qtd_removida
+
+
+
 
                     item["estoque_total"] -= quantidade
                     if item["estoque_total"] <= 0:
@@ -162,13 +229,22 @@ class Estoque:
                     try:
                         val_date = self.str_pra_date(lote["validade"])
                         if self.is_vencido(val_date):
+                            local = lote.get("localização")
+
                             removidos.append({
                                 "sku": sku,
                                 "nome": item["nome"],
                                 "lote": lote_id,
                                 "quantidade": lote["quantidade"],
-                                "validade": lote["validade"]
+                                "validade": lote["validade"],
+                                "local": local
                             })
+
+                            if local and local in self.estoque.get("localizaçoes", {}):
+                                self.estoque["localizaçoes"][local]["itens"][sku] -= lote["quantidade"]
+                                self.estoque["localizaçoes"][local]["estoque_livre"] += lote["quantidade"]
+                            
+
                             item["estoque_total"] -= lote["quantidade"]
                             lotes_pra_remover.append(lote_id)
                             self.registro_mvt(sku, "vencimento-val", lote["quantidade"], lote_id)
@@ -192,7 +268,34 @@ class Estoque:
                 print(f"  Lote: {item['lote']}")
                 print(f"  Quantidade: {item['quantidade']}")
                 print(f"  Validade: {item['validade']}")
+                print(f"  Local: {item['local'] or '—'}")
         return removidos
+    
+    def listar_localizacoes(self):
+        locais = self.estoque.get("localizaçoes", {})
+        
+        if not locais:
+            print("Nenhuma localização registrada.")
+            return
+        
+        print("LOCALIZAÇÕES REGISTRADAS")
+
+        
+        for id_local, local in locais.items():
+            print("\n" + "="*60)
+            print(f"{local['nome']} ({id_local})")
+            print(f"   Endereço: {local['endereco']['rua']}, {local['endereco']['bairro']}")
+            print(f"   CEP: {local['endereco']['cep']} - {local['endereco']['cidade']}")
+            print(f"   Capacidade: {local['estoque_total']} | Livre: {local['estoque_livre']}")
+            
+            if local["itens"]:
+                print(f"   Itens armazenados:")
+                for sku, qtd in local["itens"].items():
+                    nome = self.estoque["items"][sku]["nome"]
+                    print(f"     - {nome} ({sku}): {qtd} unidades")
+            else:
+                print(f"   Sem itens armazenados")
+            print("="*60 + "\n")
     
     def listar_movimentos(self):
         movimentos = self.estoque.get("movimentaçoes", [])
@@ -221,17 +324,18 @@ class Estoque:
             print("Lotes:")
             for lote_id, lote in item["lotes"].items():
                 validade = lote["validade"] if lote.get("validade") else "indefinido/não perecível"
-                local = lote.get("localizacao", "—")
-                print(f"  {lote_id}: {lote['quantidade']} {item.get('tipo_unidade','')}. (Validade: {validade}) Local: {local}")
+    
+                print(f"  {lote_id}: {lote['quantidade']} {item.get('tipo_unidade','')}. (Validade: {validade}) Local: {lote.get("localização", "")}")
 if __name__ == "__main__":
+    from time import sleep
     #NOTA: o padrao das validades deve ser nos formatos 'dd/mm/aaaa' ou 'dd/mm/aa'
     estoque = Estoque()
-    estoque.adicionar_item("caneta", "0001" , 100)
+    estoque.adicionar_local("galpão p1", 200, "rua-ex1", "bairo-ex1", 570000, "maceio" )
+    estoque.adicionar_item("caneta", "0001" , 100, local="galpão p1")
     estoque.adicionar_item("caderno","0002", 50)
     estoque.adicionar_item("Tinta b/ água","0004", 20,"L", "14/09/26")
 
     estoque.adicionar_item("Tinta b/ água","0005", 60,"L", "14/09/24")
-    estoque.limpar()
     estoque.gerar_relatorio()
 
     estoque.remover_itens_vencidos()
