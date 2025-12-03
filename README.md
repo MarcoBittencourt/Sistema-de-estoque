@@ -66,6 +66,40 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 ---
 
+# Como Executar o Sistema
+
+## Pré-requisitos
+- **Python 3.8+** instalado
+- **pip** (gerenciador de pacotes Python)
+
+## Passos para Instalação
+
+1. **instale o zip do codigo ou execute o seguinte comando para clonar o repositorio (precisa ter o git instalado):**
+   ```bash
+   git clone https://github.com/MarcoBittencourt/Sistema-de-estoque.git
+   cd Sistema-de-estoque
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   pip install django
+   ```
+
+3. **Entre no diretório do projeto Django:**
+   ```bash
+   cd Sistema_de_estoque1.0/sistemaestoque
+   ```
+
+4. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   python manage.py runserver
+   ```
+
+5. **Acesse a aplicação:**
+   Abra seu navegador e vá para: `http://127.0.0.1:8000`
+
+---
+
 # Estrutura de dados
 
 
@@ -110,6 +144,17 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 
 
 **Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
+
+# **Melhorias Futuras**
+
+Uma das principais melhorias a serem implementadas é o **sistema de usuários e autenticação**, que incluiria:
+
+- **Cadastro e autenticação de usuários** com controle de acesso baseado em papéis (admin, gerente, operador).
+- **Registro de auditoria** vinculado a cada usuário para rastrear quem realizou cada operação no sistema.
+- **Permissões granulares** para diferentes tipos de usuários (criar itens, editar, deletar, gerar relatórios).
+- **Controle de sessão** para segurança e gerenciamento de múltiplos usuários simultâneos.
+
+---
 
 # **Testes**
 
