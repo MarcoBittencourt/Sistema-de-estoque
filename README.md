@@ -8,9 +8,9 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 # Autores
 
 - **João Victor Lindberg Gomes de Moraes** -**Product owner**
-- **Joaquim Paulo Vieira de Melo**         -**Time de desenvolvedores (Back-End)**
-- **José Miguel Correia Dias**             -**Time de desenvolvedores (Front-End)**
-- **José Rodrigo de Santana Lima**         -**Time de desenvolvedores (desenrolado)**
+- **Joaquim Paulo Vieira de Melo**         -**Time de desenvolvedores**
+- **José Miguel Correia Dias**             -**Time de desenvolvedores**
+- **José Rodrigo de Santana Lima**         -**Time de desenvolvedores**
 - **Marco Antônio Bittencourt Costa**      -**Scrumm Master**
 
 ---
@@ -19,8 +19,7 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 - **Cadastro de produtos:** registre novos itens com informações como nome, código, quantidade, categoria e fornecedor.  
 - **Movimentação de estoque:** controle as **entradas e saídas** de produtos, com histórico detalhado.  
-- **Relatórios:** gere relatórios de estoque atual, movimentações e produtos com baixo nível de quantidade.  
-- **Controle de usuários:** autenticação e níveis de acesso para administradores e operadores.  
+- **Relatórios:** gere relatórios de estoque atual, movimentações e produtos com baixo nível de quantidade.    
 
 ---
 
@@ -61,16 +60,16 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # Tecnologias Utilizadas
 
-- **Linguagem:** Python + django 
-- **Banco de Dados:** json 
-- **Bibliotecas:** os, json e datetime
+- **Linguagem:** Python + HTML + CSS 
+- **Banco de Dados:** SQLite3
+- **Bibliotecas:** django
 
 ---
 
 # Estrutura de dados
 
 
-**arquivo raiz**: JSON object / dict
+**arquivo raiz**: SQLite 3
 
 **chave (nome do item)**: string (uso atual: o código usa o próprio nome como chave key = nome — atenção a nomes duplicados/maiúsculas).
 
@@ -126,17 +125,7 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 
 ·         Histórico de movimentação (entradas, saídas, transferências, ajustes) com registro de lote e validade.
 
-·         Anexos e documentos (nota fiscal, matrícula, NF) com metadados e link/arquivo.
-
-·         Avaliação de valor (contabilização, data da avaliação) e histórico de avaliações.
-
 ·         Relatórios (snapshot por data, total por categoria, itens abaixo do estoque mínimo, auditoria).
-
-·         Permissões/usuários: read / write / admin e papéis customizáveis.
-·         Auditoria detalhada (quem, quando, o quê e motivo).
-
-·         Importação/Exportação (CSV/Excel), backups e versionamento dos dados.
-·         Painel/Dashboard com KPIs e ações rápidas.
 
  ##  Requisitos Não Funcionais
 
@@ -147,13 +136,9 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 
 ·         Segurança: TLS/HTTPS, criptografia em repouso para documentos sensíveis, proteção contra injections e XSS.
 
-·         Internacionalização: formatos de data, moeda e multilíngue quando necessário.
+·         Internacionalização: formatos de data, multilíngue quando necessário.
 
 ·         Logs, monitoramento e estratégia de backups com testes periódicos de restore.
-
-·         SLAs e requisitos de performance mínimos (ex.: listagens paginadas < 1s para 1000 itens).
-
- ·    Privacidade: políticas de retenção, acesso e anonimização onde aplicável.
 
 
 **Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
