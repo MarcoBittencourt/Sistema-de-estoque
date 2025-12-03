@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        div {
+        margin: 20px;
+        }
+        body {
+            Background: linear-gradient(to right, #293541, #374e6f);
+            color: #fff;
+            display: center;
+            text-align: flex;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: #222222;
+            box-shadow: 0 0 20px #2c5a88;
+            border-radius: 20px;
+            padding: 20px 20px;
+            border: 2px solid #007efd;
+        }
+        .subcontainer {
+            background-color: #222222;
+            box-shadow: 0 0 20px #000000ac;
+            border-radius: 20px;
+            padding: 20px 20px;
+            border: 1px solid #5c5c5c;
+        }
+
+        th {
+            background-color: #222222;
+            border-radius: 10px;
+            padding: 10px 20px;
+            border: 1px solid #5c5c5c;    
+        }
+
+        te {
+            background-color: #222222;
+            border-radius: 10px;
+            padding: 10px 10px;
+            border: 1px solid #5c5c5c;    
+        }
+
+        td {
+            background-color: #222222;
+            border-radius: 10px;
+            padding: 7px 2px;
+            border: 1px solid #5c5c5c;
+            font-size: 12px;  
+        }
+
+        table {
+            background-color: #222222;
+            box-shadow: 0 0 20px #000000ac;
+            border-radius: 10px;
+            padding: 10px 40px;
+            border: 1px solid #5c5c5c;
+            font-size: 12px;  
+        }
+        h1 {
+            border-radius: 10px;
+            font-size: 40px; 
+        }
+        ul {
+            font-family: arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            list-style-type: none;
+            align-items: center;
+            padding: 1px 35px;
+            box-shadow: 0 0 10px #222222;
+            font-size: 27px;
+        }
+        .btn {
+            transition: 0.7s ease;
+            border: 2px solid #5c5c5c;
+            background-color: #161616;
+            border-radius: 12px;
+            padding: 5px;
+            color: #fff;
+            font-family: Arial, Sans-serif;
+            text-decoration: none;
+            font-size: 25px;
+        }
+        .btn:hover {
+            box-shadow: 0px 0px 20px #00a2ff5d;
+            border: 2px solid #0080ff;
+        }
+        .actionbtn {
+            transition: 0.7s ease;
+            border: 2px solid #5c5c5c;
+            background-color: #16161600;
+            border-radius: 12px;
+            padding: 5px;
+            color: #fff;
+            font-family: Arial, Sans-serif;
+            text-decoration: none;
+            font-size: 20px;
+            margin: 15px;
+        }
+        .actionbtn:hover {
+            box-shadow: 0px 0px 15px #74ffa7;
+            border: 2px solid #00ff84;
+        }
+        footer {
+            border: 2px solid #fff;
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin: 20px;
+            text-align: center;
+            font-size: 15px;
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul class="subcontainer">
+                <h1>4JM STOCK</h1>
+                <p>
+                    <a class="btn" href="{% url 'sistema_home' %}">Voltar</a>
+                </p>
+            </ul>
+        </nav>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Quantidade</th>
+                <th>Descrição</th>
+                <th>Data de Entrada</th>
+                <th>Localização</th>
+                <th>Categoria</th>
+                <th>Nome do Dono</th>
+                <th>Sobrenome do Dono</th>
+                <th>Ação de Editar</th>
+                <th>Ação de Remover</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in itens %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>{{ item.dataentrada }}</td>
+                <td>{{ item.localizacao }}</td>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.donoprenome }}</td>
+                <td>{{ item.donosobrenome }}</td>
+                <td><a class="actionbtn" href="{% url 'estoque:editar' item.id %}">Editar</a></td>
+                <td><a class="actionbtn" href="{% url 'estoque:remover' item.id %}">Remover</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a class="btn" href="{% url 'estoque:adicionar' %}">Adicionar novo item</a>
+    <a class="btn" href="{% url 'estoque:historico' %}">Ver Relatório</a>
+</div>
+</body>
+    <footer>
+        Copyright: &copy FourJayM - 2025
+    </footer>
+</html>
