@@ -85,25 +85,9 @@ adicionar_item soma à quantidade existente (se item existe).
 
 remover_item subtrai; se chega a 0, o item é deletado do dicionário.
 
-**validade**:
-
-**tipo**: string com formato "dd/mm/YYYY" ou null
-
-None/null indica sem validade (não perecível / indefinido)
-
-**observado pelo código**:
-
-tradutor_str_pra_data aceita entrada dd/mm/YYYY ou dd/mm/YY, retorna date.
-
-_format_validade padroniza para dd/mm/YYYY ao salvar.
-
-_is_vencido compara com date.today().
-
 **Invariantes importantes**:
 
-Se validade for null, _is_vencido trata como não vencido.
-
-Sempre que quantidade == 0 o item é removido do JSON.
+Sempre que quantidade == 0 o item é removido do banco de dados.
 
 O código assume que quantidade existe e é inteiro ao gerar relatório; corrupção de arquivo pode causar exceções.
 
@@ -112,33 +96,17 @@ O código assume que quantidade existe e é inteiro ao gerar relatório; corrup�
 # **Requisitos**
 
 ## Funcionalidades Principais
-
-· CRUD de itens (criar / ler / atualizar / excluir - preferencialmente soft delete).
-
-· Categorias (hierarquia).
-
-· Localizações físicas (depósito, loja, prateleira) e gerenciamento de estoques por local.
-
-·         Controle de quantidade e unidade de medida (inteiros/decimais, conversão de unidade de medida mínima).
-
-·         Lote e validade (suporte FIFO, bloqueio automático de vencidos).
-
+·         CRUD de itens (criar / ler / atualizar / excluir - preferencialmente soft delete).
+·         Categorias (hierarquia).
+·         Localizações físicas (depósito, loja, prateleira) e gerenciamento de estoques por local.
 ·         Histórico de movimentação (entradas, saídas, transferências, ajustes) com registro de lote e validade.
-
 ·         Relatórios (snapshot por data, total por categoria, itens abaixo do estoque mínimo, auditoria).
-
- ##  Requisitos Não Funcionais
-
+## Requisitos Não Funcionais
 ·         Persistência durável: banco relacional (Postgres, MySQL) ou NoSQL quando apropriado.
-·         Autenticação segura e autorização baseada em papéis (RBAC).
-
 ·         Escalabilidade horizontal e vertical para suportar desde 1 até dezenas de milhares de itens e usuários.
-
 ·         Segurança: TLS/HTTPS, criptografia em repouso para documentos sensíveis, proteção contra injections e XSS.
-
 ·         Internacionalização: formatos de data, multilíngue quando necessário.
-
-·         Logs, monitoramento e estratégia de backups com testes periódicos de restore.
+·         Logs, monitoramento e estratégia de backups com testes periódicos de restore
 
 
 **Link:**  https://docs.google.com/document/d/1AcYf1uLQNP1-pEKIbFG9oFyqUw3kATcOblzQKo8zAnI/edit?tab=t.0
