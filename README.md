@@ -170,5 +170,8 @@ Uma das principais melhorias a serem implementadas é o **sistema de usuários e
 
 **Link:** https://docs.google.com/document/d/1zFkvGLDfj65pnoVK0iUFj36kBWI0w3nAYn71Fvb2yfg/edit?usp=sharing
 
+---
 
+# **Relatório final do projeto**
 
+**Link:** https://docs.google.com/document/d/12l6VYQwV_K8fU2HonW3I111alCFE4UbcWqFs2I1XS8w/edit?tab=t.0
