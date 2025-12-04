@@ -25,7 +25,8 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 # trello
 
-<img width="1250" height="817" alt="image" src="https://github.com/user-attachments/assets/2a247a1b-1253-426b-8934-1853bf8d6a1a" />
+<img width="1492" height="734" alt="screenshot-1764847385014" src="https://github.com/user-attachments/assets/2b277833-ba75-4021-a8b9-c87ecdf15dea" />
+
 
 
 
@@ -104,6 +105,8 @@ O projeto visa otimizar o registro de itens, acompanhar movimentações de entra
 
 
 **arquivo raiz**: SQLite 3
+
+**Tipo de estrutura utilizada**: Filas, elas foram utilizadas para armazenar os itens na ordem em que foram adicionados  
 
 **chave (nome do item)**: string (uso atual: o código usa o próprio nome como chave key = nome — atenção a nomes duplicados/maiúsculas).
 
